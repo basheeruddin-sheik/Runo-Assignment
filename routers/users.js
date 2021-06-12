@@ -241,7 +241,14 @@ router.post('/user/dates/slots/slotRegistration', async (req, res) => {
                                         currentDateTime.getMilliseconds())
 
             //if user already registered for second dose.
-            if(val.stateOfDosage == "Second dose registered") {
+            if(currentDateTime.getTime() > doseDateTime.getTime() && val.stateOfDosage == "Second dose registered") { //if time lapsed then updating.
+                await Registration.findByIdAndUpdate(val._id, {stateOfDosage: "All completed"})
+                res.status(400).json({
+                    success:false, 
+                    message : "You completed all doses."
+                });
+            }
+            else if(val.stateOfDosage == "Second dose registered") {
                 res.status(400).json({success:false, message : "You already registered for second dose."});
             }
             else if(currentDateTime.getTime() <= doseDateTime.getTime()) { //allowing after completing the first dose.
@@ -249,9 +256,6 @@ router.post('/user/dates/slots/slotRegistration', async (req, res) => {
                     success:false, 
                     message : "You didnot taken first dose. Please register after completing the first dose."
                 });
-            }
-            else if(currentDateTime.getTime() > doseDateTime.getTime() && val.stateOfDosage == "Second dose registered") { //if time lapsed then updating.
-                await Registration.findByIdAndUpdate(val._id, {stateOfDosage: "All completed"})
             }
             else{ //registering for second dose by updating the details.
                 await Registration.findByIdAndUpdate(val._id, {stateOfDosage: "Second dose registered", slotDate: req.body.slotDate, slotTime: req.body.slotTime})
