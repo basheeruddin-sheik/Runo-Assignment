@@ -1,7 +1,9 @@
 Assignment: An app created for vaccine registration (similar to that of Arogyasetu Cowin part).
 
 User schema: name, phone, age, pincode, aadhar, password and token.
+
 Registration schema: user(user id), username, age, pincode, phone, stateofDosage, slotDate and slotTime.
+
 Admin schema: phone, password and token.
 
 Note for all APIs timeFormate:"hh.mmAM-hh.mmPM" and dateFormate: "dd-mm-yyyy"
